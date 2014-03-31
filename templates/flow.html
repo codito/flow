@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}Flow #{{ flow_id }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <h1>Flow # {{ flow_id }}</h1>
+    <div id="flow" style="height:800px">
+      <code>Placeholder for {{ flow_id }}!</code>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+/*jQuery.fn.attachmentEditorWidget = function (mapModel) {
+    'use strict';
+    return this.each(function () {
+        var element = jQuery(this);
+        mapModel.addEventListener('attachmentOpened', function (nodeId, attachment) {
+            mapModel.setAttachment(
+                'attachmentEditorWidget',
+                nodeId, {
+                    contentType: 'text/html',
+                    content: prompt('attachment', attachment && attachment.content)
+                }
+            );
+        });
+    });
+};*/
+$(document).ready(function () {
+    window.onerror = alert;
+    var container = jQuery('#flow'),
+    idea = MAPJS.content(test_tree()),
+    isTouch = false,
+    imageInsertController = new MAPJS.ImageInsertController("http://localhost:4999?u="),
+    mapModel = new MAPJS.MapModel(MAPJS.KineticMediator.layoutCalculator, []);
+
+    container.mapWidget(console, mapModel, isTouch, imageInsertController);
+    jQuery('body').mapToolbarWidget(mapModel);
+    //jQuery('body').attachmentEditorWidget(mapModel);
+    $("[data-mm-action='export-image']").click(function () {
+        MAPJS.pngExport(idea).then(function (url) {
+            window.open(url, '_blank');
+        });
+    });
+
+    mapModel.setIdea(idea);
+    jQuery('#linkEditWidget').linkEditWidget(mapModel);
+    window.mapModel = mapModel;
+    jQuery('.arrow').click(function () {
+        jQuery(this).toggleClass('active');
+    });
+    imageInsertController.addEventListener('imageInsertError', function (reason) {
+        console.log('image insert error', reason);
+    });
+}());
+</script>
+{% endblock %}
