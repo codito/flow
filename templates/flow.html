@@ -6,7 +6,27 @@
 <div class="container-fluid">
   <div class="row">
     <h1>Flow # {{ flow_id }}</h1>
-    <div id="flow" style="height:800px">
+    <div>
+      <input type="button" class="btn btn-default resetView" value="0"></input>
+      <input type="button" class="btn btn-default scaleUp" value="+"></input>
+      <input type="button" class="btn btn-default scaleDown" value="-"></input>
+      <input type="button" class="btn btn-default addSubIdea" value="add"></input>
+      <input type="button" class="btn btn-default editNode" value="edit"></input>
+      <input type="button" class="btn btn-default removeSubIdea" value="delete"></input>
+      <input type="button" class="btn btn-default insertIntermediate" value="insert parent"></input>
+      <input type="button" class="btn btn-default toggleCollapse" value="exp/col"></input>
+      <input type="button" class="btn btn-default " onclick="mapModel.setInputEnabled(false)" value="disable"></input>
+      <input type="button" class="btn btn-default " onclick="mapModel.setInputEnabled(true)" value="enable"></input>
+      <input type="button" class="btn btn-default undo" value="undo"></input>
+      <input type="button" class="btn btn-default redo" value="redo"></input>
+      <input type="button" class="btn btn-default " data-mm-action="export-image" value="Export To Image"/>
+      <input type="button" class="btn btn-default cut" value="cut"></input>
+      <input type="button" class="btn btn-default copy" value="copy"></input>
+      <input type="button" class="btn btn-default paste" value="paste"></input>
+      <input type="button" class="btn btn-default openAttachment" value="open attachment"></input>
+      <input type="button" class="btn btn-default toggleAddLinkMode" value="add link"></input>
+    </div>
+    <div id="flow" class="col-md-8" style="height:800px">
       <code>Placeholder for {{ flow_id }}!</code>
     </div>
   </div>
