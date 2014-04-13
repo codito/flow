@@ -6,12 +6,28 @@ from flask import Flask
 from flask import render_template
 from flask.ext import assets
 
-app = Flask(__name__)
-app.config.from_object(__name__)
+from flask_peewee.db import Database
+from flask_peewee.rest import RestAPI
 
-env = assets.Environment(app)
+import config
+
+# Application configuration
+DATABASE = {
+    'name': 'flow.db',
+    'engine': 'peewee.SqliteDatabase',
+}
+DEBUG = True
+
+# Initialize flask and load configuration
+app = Flask(__name__)
+app.config.from_object(config.ProductionConfig)
+
+db = None
+api = None
 
 # Tell flask-assets where to look for our coffeescript and sass files.
+env = assets.Environment(app)
+
 env.load_path = [
     os.path.join(os.path.dirname(__file__), 'bower_components'),
     os.path.join(os.path.dirname(__file__), 'static'),
@@ -52,6 +68,21 @@ env.register(
 )
 
 
+def initialize():
+    global db, api
+
+    db = Database(app)
+
+    # Setup models
+    import models
+    models.setup()
+
+    # Register REST api
+    api = RestAPI(app)
+    api.register(models.Flow)
+    api.setup()
+
+
 @app.route('/')
 def index():
     return 'Hello World!'
@@ -60,6 +91,3 @@ def index():
 @app.route('/flow/<id>')
 def show(id):
     return render_template('flow.html', flow_id=id)
-
-if __name__ == '__main__':
-    app.run(debug=True)
